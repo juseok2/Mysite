@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6단계(슬라이더Zone)</title>
+    <title>7단계(슬라이더Zone-자바스크립트)</title>
     <script src="js/jquery.js"></script>
     <style>
         *{margin:0; padding: 0;}
         a{text-decoration: none; text-align: center;}
         ul,li{
             list-style: none;
-            border: 1px solid green;
+            /* border: 1px solid green; */
         }
         div{
-            border: 1px solid blue;
+            /* border: 1px solid blue; */
             /* height:30px; */
         }
     </style>
@@ -163,15 +163,18 @@
                     display: flex;
                     position: relative;
                     left:0px;  /*좌표변경으로 스라이딩 표현 */
-                    /* transition: left 0.5s ease; */
+                    transition: left 0.5s ease;
                 }
                 /* .slider_panel>li */
                 .slider_image{
+                    display: block;
                     min-width: 100%;
                 }
                 .slider_image img{
                     width: 100%;
+                    object-fit: cover;
                     display: block;
+                    box-sizing: border-box;
                 }
 
                 /* 슬라이더 컨트롤 */
@@ -184,6 +187,7 @@
                     bottom:10px;
                     left:50%;
                     display: flex;
+                    transform: translateX(-50%);
                 }
                 .control_btn{
                     width: 10px;
@@ -191,6 +195,7 @@
                     background-color: white;
                     border-radius: 50%;
                     cursor: pointer;
+                    margin: 5px;
                 }
 
                 .control_btn.active{
@@ -206,17 +211,16 @@
                     justify-content:space-between;
                 }
                 .direct_btn img{ cursor: pointer;}
-
             </style>
             <div id="sliderZone">
                 <div id="sub_photo_bg">
                     <ul class="slider_panel">
-                        <li class="slider_img"><img src="images/1.jpg" alt=""></li>
-                        <li class="slider_img"><img src="images/2.jpg" alt=""></li>
-                        <li class="slider_img"><img src="images/3.jpg" alt=""></li>
-                        <li class="slider_img"><img src="images/1.jpg" alt=""></li>
-                        <li class="slider_img"><img src="images/2.jpg" alt=""></li>
-                        <li class="slider_img"><img src="images/3.jpg" alt=""></li>
+                        <li class="slider_image"><img src="images/1.jpg" alt=""></li>
+                        <li class="slider_image"><img src="images/2.jpg" alt=""></li>
+                        <li class="slider_image"><img src="images/3.jpg" alt=""></li>
+                        <!-- <li class="slider_image"><img src="images/1.jpg" alt=""></li>
+                        <li class="slider_image"><img src="images/2.jpg" alt=""></li>
+                        <li class="slider_image"><img src="images/3.jpg" alt=""></li> -->
                     </ul>
                     <div class="control_panel">
                         <div class="control_btn active"  data-index="0"></div>
@@ -229,12 +233,46 @@
                     </div>
                 </div>
             </div>
-            <!-- <script>
+            <script>
                 $(function(){
-                    const $silderPanel = $('slider_panel');
-                    const $silderPanel = $('slider_panel');
+                    const $silderPanel = $('.slider_panel');
+                    const $controlBtns = $('.control_btn');
+                    const $leftBtn = $('.left_btn img');
+                    const $rightBtn = $('.right_btn img');
+
+                    let currentIndex = 0;
+                    function updateSilder(index){
+                        $silderPanel.css('left',`-${index * 100}%`);
+                        $controlBtns.removeClass('active');
+                        $controlBtns.eq(index).addClass('active');
+                    }
+
+                    $leftBtn.on('click',function(){
+                        currentIndex--;
+                        if(currentIndex < 0){
+                            currentIndex = 0;
+                        }
+                        updateSilder(currentIndex);
+                    });
+                    $rightBtn.on('click',function(){
+                        currentIndex++;
+                        if(currentIndex > 2){
+                            currentIndex = 2;
+                        }
+                        updateSilder(currentIndex);
+                    });
+
+                    $controlBtns.on('click',function(){
+                        currentIndex = parseInt($(this).data('index'));
+                        updateSilder(currentIndex);
+                    });
+                    setInterval(function(){
+                        currentIndex = (currentIndex+1) % $controlBtns.length;
+                        updateSilder(currentIndex);
+                    },3000);
+                    // updateSilder(2);
                 });
-            </script> -->
+            </script>
             <!-- 슬라이더Zone끝 -->
         </div>
         <!-- 상단Area끝 -->
